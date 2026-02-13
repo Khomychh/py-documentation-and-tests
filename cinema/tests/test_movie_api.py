@@ -146,7 +146,7 @@ class MovieImageUploadTests(TestCase):
             self.client.post(url, {"image": ntf}, format="multipart")
         res = self.client.get(MOVIE_URL)
 
-        self.assertIn("image", res.data[0].keys())
+        self.assertIn("image", res.data["results"][0].keys())
 
     def test_image_url_is_shown_on_movie_session_detail(self):
         url = image_upload_url(self.movie.id)
@@ -157,7 +157,7 @@ class MovieImageUploadTests(TestCase):
             self.client.post(url, {"image": ntf}, format="multipart")
         res = self.client.get(MOVIE_SESSION_URL)
 
-        self.assertIn("movie_image", res.data[0].keys())
+        self.assertIn("movie_image", res.data["results"][0].keys())
 
 
 class UnauthorizedMovieTests(TestCase):
@@ -247,13 +247,17 @@ class AuthorizedMovieTests(TestCase):
         self.assertEqual(serializer.data, res.data)
 
     def test_create_movie_forbidden(self):
+        genre = sample_genre()
+        actor = sample_actor()
         payload = {
-            "title": "Sample movie 2",
+            "title": "Sample movie 20",
             "description": "Sample description",
             "duration": 90,
+            "genres": [genre.id],
+            "actors": [actor.id],
         }
 
-        res = self.client.post(MOVIE_URL, data=payload)
+        res = self.client.post(MOVIE_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
