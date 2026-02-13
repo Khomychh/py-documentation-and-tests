@@ -199,7 +199,7 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
             OpenApiParameter(
                 name="movie",
                 description="Search sessions by movie id",
-                type=str,
+                type=int,
                 required=False,
             ),
         ]

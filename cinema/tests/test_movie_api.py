@@ -198,7 +198,7 @@ class AuthorizedMovieTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIn(serializer.data, res.data["results"])
-        self.assertNotIn(serializer_02, res.data["results"])
+        self.assertNotIn(serializer_02.data, res.data["results"])
 
     def test_filter_movies_by_actor(self):
         actor = sample_actor()
@@ -212,7 +212,7 @@ class AuthorizedMovieTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIn(ser_movie_with_actor.data, res.data["results"])
-        self.assertNotIn(ser_movie_without_actor, res.data["results"])
+        self.assertNotIn(ser_movie_without_actor.data, res.data["results"])
 
     def test_filter_movies_by_genre(self):
         genre_1 = sample_genre(name="Drama")
