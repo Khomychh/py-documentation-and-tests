@@ -250,18 +250,19 @@ class AuthorizedMovieTests(TestCase):
         genre = sample_genre()
         actor = sample_actor()
         payload = {
-            "title": "Sample movie 20",
+            "title": "Sample movie 2",
             "description": "Sample description",
             "duration": 90,
             "genres": [genre.id],
             "actors": [actor.id],
         }
 
-        res = self.client.post(MOVIE_URL, payload)
+        res = self.client.post(MOVIE_URL, data=payload)
+        self.assertFalse(self.user.is_staff)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class AdminMovieTests(AuthorizedMovieTests):
+class AdminMovieTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_superuser(
@@ -269,7 +270,7 @@ class AdminMovieTests(AuthorizedMovieTests):
         )
         self.client.force_authenticate(self.user)
 
-    def test_create_movie(self):
+    def test_create_movie_is_allowed(self):
         genre = sample_genre()
         actor = sample_actor()
         payload = {
